@@ -177,7 +177,7 @@
   <script>
     const SUPABASE_URL = 'https://axymqdzxwqzleyaevlhp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4eW1xZHp4d3F6bGV5YWV2bGhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMTIyNDgsImV4cCI6MjA4NTY4ODI0OH0.TJ4PR6muU28knzv9grLHo1GUFtmZ0jdcrOeqtoO1C-0';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const input = document.getElementById('itemInput');
     const addBtn = document.getElementById('addBtn');
@@ -187,7 +187,7 @@
     let items = [];
 
     async function loadItems() {
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from('shopping_items')
         .select('*')
         .order('created_at', { ascending: true });
@@ -223,7 +223,7 @@
 
         li.querySelector('.check-btn').addEventListener('click', async () => {
           const newChecked = !item.checked;
-          const { error } = await supabase
+          const { error } = await db
             .from('shopping_items')
             .update({ checked: newChecked })
             .eq('id', item.id);
@@ -237,7 +237,7 @@
         });
 
         li.querySelector('.delete-btn').addEventListener('click', async () => {
-          const { error } = await supabase
+          const { error } = await db
             .from('shopping_items')
             .delete()
             .eq('id', item.id);
@@ -258,7 +258,7 @@
       const name = input.value.trim();
       if (!name) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from('shopping_items')
         .insert({ name, checked: false })
         .select()
